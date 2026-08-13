@@ -6,6 +6,8 @@ import { Employee, EmployeeInput } from "@/lib/api";
 interface Props {
   mode: "create" | "edit";
   employee?: Employee;
+  departments: string[];
+  positions: string[];
   busy: boolean;
   onClose: () => void;
   onSubmit: (input: EmployeeInput) => void;
@@ -39,6 +41,8 @@ const toFormState = (e?: Employee): FormState => ({
 export default function EmployeeModal({
   mode,
   employee,
+  departments,
+  positions,
   busy,
   onClose,
   onSubmit,
@@ -60,7 +64,7 @@ export default function EmployeeModal({
 
   const set =
     (key: keyof FormState) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       setForm((f) => ({ ...f, [key]: e.target.value }));
       setErrors((prev) => ({ ...prev, [key]: undefined }));
     };
@@ -166,24 +170,36 @@ export default function EmployeeModal({
               <label className="mb-1.5 block text-sm font-medium text-slate-700">
                 Position
               </label>
-              <input
+              <select
                 className={inputClass()}
                 value={form.position}
                 onChange={set("position")}
-                placeholder="e.g. Product Manager"
-              />
+              >
+                <option value="">Select position…</option>
+                {positions.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
               <label className="mb-1.5 block text-sm font-medium text-slate-700">
                 Department
               </label>
-              <input
+              <select
                 className={inputClass()}
                 value={form.department}
                 onChange={set("department")}
-                placeholder="e.g. Product"
-              />
+              >
+                <option value="">Select department…</option>
+                {departments.map((d) => (
+                  <option key={d} value={d}>
+                    {d}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>

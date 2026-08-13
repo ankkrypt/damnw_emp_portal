@@ -49,6 +49,25 @@ const DEPT_PALETTE = [
   "bg-fuchsia-50 text-fuchsia-700 ring-fuchsia-200",
 ];
 
+// Dropdown options for the add/edit employee modal. Edit these lists to change
+// the choices shown in the Position and Department dropdowns.
+const DEPARTMENTS = [
+  "Engineering",
+  "Product",
+  "Design",
+  "Human Resources",
+  "Data",
+];
+
+const POSITIONS = [
+  "Software Engineer",
+  "Product Manager",
+  "UI/UX Designer",
+  "DevOps Engineer",
+  "HR Manager",
+  "Data Analyst",
+];
+
 function hashColor(name: string, palette: string[]): string {
   let h = 0;
   for (let i = 0; i < name.length; i++) {
@@ -137,7 +156,7 @@ export default function Home() {
     setReloadKey((k) => k + 1);
   };
 
-  const departments = useMemo(
+  const filterDepartments = useMemo(
     () =>
       Array.from(
         new Set(employees.map((e) => e.department).filter(Boolean))
@@ -380,7 +399,7 @@ export default function Home() {
             className="rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-medium text-slate-700 shadow-sm outline-none transition focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100"
           >
             <option value="all">All departments</option>
-            {departments.map((d) => (
+            {filterDepartments.map((d) => (
               <option key={d} value={d}>
                 {d}
               </option>
@@ -598,6 +617,8 @@ export default function Home() {
           key={modal.mode === "edit" ? modal.employee._id : "create"}
           mode={modal.mode}
           employee={modal.mode === "edit" ? modal.employee : undefined}
+          departments={DEPARTMENTS}
+          positions={POSITIONS}
           busy={saving}
           onClose={() => {
             if (!saving) setModal(null);
