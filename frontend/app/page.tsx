@@ -10,7 +10,7 @@ import {
   updateEmployee,
   deleteEmployee,
 } from "@/lib/api";
-import { logout, useSession } from "@/lib/auth";
+import { getSession, logout, useSession } from "@/lib/auth";
 import EmployeeModal from "@/components/EmployeeModal";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import Toasts, { Toast } from "@/components/Toast";
@@ -107,9 +107,14 @@ export default function Home() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [reloadKey, setReloadKey] = useState(0);
 
-  // Gate the page behind the demo login.
+  // Gate the page behind the demo login. useSession() returns null on the
+  // server and during the initial hydration render (its server snapshot is
+  // () => null) even for signed-in users, so compare against the real store
+  // value (getSession) before redirecting. Otherwise every page load
+  // "bounces" to /auth/login and straight back, remounting this page and
+  // firing a second fetch to /api/employees.
   useEffect(() => {
-    if (!session) {
+    if (session === null && getSession() === null) {
       router.replace("/auth/login");
     }
   }, [session, router]);
@@ -131,6 +136,10 @@ export default function Home() {
   );
 
   useEffect(() => {
+    // Don't fetch until the session has resolved (it's null during the initial
+    // hydration render even for signed-in users). This also prevents a request
+    // from firing while the page is mid-redirect to /auth/login.
+    if (!session) return;
     let active = true;
     fetchEmployees()
       .then((data) => {
@@ -148,7 +157,7 @@ export default function Home() {
     return () => {
       active = false;
     };
-  }, [reloadKey]);
+  }, [session, reloadKey]);
 
   const retry = () => {
     setLoading(true);
