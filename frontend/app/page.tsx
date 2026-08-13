@@ -11,6 +11,8 @@ import {
   deleteEmployee,
 } from "@/lib/api";
 import { getSession, logout, useSession } from "@/lib/auth";
+import { matchesDepartment, matchesSearch } from "@/lib/filters";
+import { hashColor, initials } from "@/lib/format";
 import EmployeeModal from "@/components/EmployeeModal";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import Toasts, { Toast } from "@/components/Toast";
@@ -68,25 +70,8 @@ const POSITIONS = [
   "Data Analyst",
 ];
 
-function hashColor(name: string, palette: string[]): string {
-  let h = 0;
-  for (let i = 0; i < name.length; i++) {
-    h = (h * 31 + name.charCodeAt(i)) % 9973;
-  }
-  return palette[h % palette.length];
-}
-
 const avatarColor = (name: string) => hashColor(name, AVATAR_COLORS);
 const deptColor = (dept: string) => hashColor(dept || "?", DEPT_PALETTE);
-
-const initials = (name: string) =>
-  name
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((p) => p[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 
 type ModalState =
   | { mode: "create" }
@@ -173,19 +158,13 @@ export default function Home() {
     [employees]
   );
 
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return employees.filter((e) => {
-      const matchesDept = department === "all" || e.department === department;
-      const matchesSearch =
-        !q ||
-        e.name.toLowerCase().includes(q) ||
-        e.email.toLowerCase().includes(q) ||
-        e.position.toLowerCase().includes(q) ||
-        e.department.toLowerCase().includes(q);
-      return matchesDept && matchesSearch;
-    });
-  }, [employees, search, department]);
+  const filtered = useMemo(
+    () =>
+      employees.filter(
+        (e) => matchesDepartment(e, department) && matchesSearch(e, search)
+      ),
+    [employees, search, department]
+  );
 
   const handleSubmit = async (input: EmployeeInput) => {
     if (!modal) return;

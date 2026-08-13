@@ -86,7 +86,7 @@ export function logout(): void {
   writeSession(null);
 }
 
-function displayName(email: string): string {
+export function displayName(email: string): string {
   const local = email.split("@")[0] || "User";
   return (
     local

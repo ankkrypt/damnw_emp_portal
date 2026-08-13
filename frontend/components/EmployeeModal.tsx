@@ -29,12 +29,12 @@ const NAME_MAX_LENGTH = 100;
 
 // Build a UTC-midnight ISO string from a "YYYY-MM-DD" date input so the
 // stored date matches the date the user picked in every timezone.
-const toISODate = (value: string): string => {
+export const toISODate = (value: string): string => {
   const [y, m, d] = value.split("-").map(Number);
   return new Date(Date.UTC(y, m - 1, d)).toISOString();
 };
 
-const toFormState = (e?: Employee): FormState => ({
+export const toFormState = (e?: Employee): FormState => ({
   name: e?.name ?? "",
   email: e?.email ?? "",
   position: e?.position ?? "",

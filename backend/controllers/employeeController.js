@@ -10,6 +10,7 @@ const pickEmployeeFields = (body) => ({
   salary: body.salary,
   joinDate: body.joinDate,
 });
+exports.pickEmployeeFields = pickEmployeeFields;
 
 /**
  * GET /api/employees
