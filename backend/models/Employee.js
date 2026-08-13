@@ -6,6 +6,16 @@ const employeeSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Name is required'],
       trim: true,
+      minlength: [2, 'Name must be at least 2 characters'],
+      maxlength: [100, 'Name must be at most 100 characters'],
+      match: [
+        /^[\p{L}\p{M}]+(?: [\p{L}\p{M}]+)*$/u,
+        'Name can only contain letters and spaces',
+      ],
+      validate: {
+        validator: (v) => v.trim().split(/\s+/).length >= 2,
+        message: 'Please provide the full name (first and last name)',
+      },
     },
     email: {
       type: String,

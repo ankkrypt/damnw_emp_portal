@@ -22,6 +22,11 @@ interface FormState {
   joinDate: string;
 }
 
+// Letters (incl. accented/Unicode) separated by single spaces — e.g. "Jane Smith".
+const NAME_REGEX = /^[\p{L}\p{M}]+(?: [\p{L}\p{M}]+)*$/u;
+const NAME_MIN_LENGTH = 2;
+const NAME_MAX_LENGTH = 100;
+
 // Build a UTC-midnight ISO string from a "YYYY-MM-DD" date input so the
 // stored date matches the date the user picked in every timezone.
 const toISODate = (value: string): string => {
@@ -71,7 +76,16 @@ export default function EmployeeModal({
 
   const validate = (): boolean => {
     const next: Partial<Record<keyof FormState, string>> = {};
-    if (!form.name.trim()) next.name = "Name is required";
+    const name = form.name.trim();
+    if (!name) next.name = "Name is required";
+    else if (name.length < NAME_MIN_LENGTH)
+      next.name = `Name must be at least ${NAME_MIN_LENGTH} characters`;
+    else if (name.length > NAME_MAX_LENGTH)
+      next.name = `Name must be at most ${NAME_MAX_LENGTH} characters`;
+    else if (!NAME_REGEX.test(name))
+      next.name = "Name can only contain letters and spaces";
+    else if (name.split(/\s+/).length < 2)
+      next.name = "Please enter your full name (first and last name)";
     if (!form.email.trim()) next.email = "Email is required";
     else if (!/^\S+@\S+\.\S+$/.test(form.email.trim()))
       next.email = "Enter a valid email address";
@@ -144,6 +158,8 @@ export default function EmployeeModal({
                 value={form.name}
                 onChange={set("name")}
                 placeholder="e.g. Jane Smith"
+                maxLength={NAME_MAX_LENGTH}
+                autoComplete="name"
               />
               {errors.name && (
                 <p className="mt-1 text-xs text-red-600">{errors.name}</p>
