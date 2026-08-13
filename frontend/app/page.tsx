@@ -11,7 +11,6 @@ import {
   deleteEmployee,
 } from "@/lib/api";
 import { logout, useSession } from "@/lib/auth";
-import StatsCards from "@/components/StatsCards";
 import EmployeeModal from "@/components/EmployeeModal";
 import ConfirmDialog from "@/components/ConfirmDialog";
 import Toasts, { Toast } from "@/components/Toast";
@@ -350,7 +349,6 @@ export default function Home() {
 
       {/* ---------- Content ---------- */}
       <div className="mx-auto max-w-6xl space-y-6 px-5 py-8 sm:px-8">
-        <StatsCards employees={employees} loading={loading} />
 
         {/* ---------- Toolbar ---------- */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
