@@ -239,9 +239,6 @@ export default function Home() {
                 <h1 className="text-xl font-bold tracking-tight text-white sm:text-2xl">
                   Employee Portal
                 </h1>
-                <p className="text-sm text-slate-400">
-                  Next.js + Express + MongoDB
-                </p>
               </div>
             </div>
 
@@ -595,11 +592,6 @@ export default function Home() {
             </div>
           )}
         </div>
-
-        <footer className="pb-6 text-center text-xs text-slate-400">
-          Employee Portal · Next.js frontend proxying to the Express API at
-          localhost:5000
-        </footer>
       </div>
 
       {/* ---------- Overlays ---------- */}
