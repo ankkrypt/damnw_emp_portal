@@ -235,7 +235,7 @@ export default function Home() {
       <header className="relative overflow-hidden bg-slate-950">
         <div className="pointer-events-none absolute -top-32 left-1/2 h-72 w-[42rem] -translate-x-1/2 rounded-full bg-indigo-600/25 blur-3xl" />
         <div className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-violet-600/20 blur-3xl" />
-        <div className="relative mx-auto flex max-w-6xl flex-col gap-6 px-5 py-10 sm:px-8">
+        <div className="relative mx-auto flex max-w-6xl flex-col gap-6 px-5 py-8 sm:px-8 sm:py-10">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-900/40">
@@ -260,7 +260,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <div className="hidden items-center gap-2 md:flex">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-xs font-bold text-white shadow-md shadow-indigo-900/40">
                   {session.name
@@ -275,7 +275,8 @@ export default function Home() {
                 </span>
               </div>
               <span
-                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium ${
+                title={error ? "API unreachable" : "API connected"}
+                className={`inline-flex items-center rounded-full border p-1.5 text-xs font-medium sm:gap-2 sm:px-3 sm:py-1.5 ${
                   error
                     ? "border-red-400/30 bg-red-500/10 text-red-300"
                     : "border-emerald-400/30 bg-emerald-500/10 text-emerald-300"
@@ -286,12 +287,13 @@ export default function Home() {
                     error ? "bg-red-400" : "bg-emerald-400 animate-pulse-dot"
                   }`}
                 />
-                {error ? "API unreachable" : "API connected"}
+                <span className="hidden sm:inline">
+                  {error ? "API unreachable" : "API connected"}
+                </span>
               </span>
               <button
                 onClick={handleLogout}
-                title="Log out"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-white/10 hover:text-white active:scale-[0.97]"
+                className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm font-semibold text-slate-200 transition hover:bg-white/10 hover:text-white active:scale-[0.97]"
               >
                 <svg
                   className="h-4 w-4"
@@ -306,11 +308,11 @@ export default function Home() {
                     d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
                   />
                 </svg>
-                <span className="hidden sm:inline">Log out</span>
+                Log out
               </button>
               <button
                 onClick={() => setModal({ mode: "create" })}
-                className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-900/30 transition hover:bg-indigo-50 hover:text-indigo-700 active:scale-[0.97]"
+                className="inline-flex items-center gap-2 whitespace-nowrap rounded-xl bg-white px-3.5 py-2.5 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-900/30 transition hover:bg-indigo-50 hover:text-indigo-700 active:scale-[0.97] sm:px-4"
               >
                 <svg
                   className="h-4 w-4"
